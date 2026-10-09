@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Lost & Found Portal</title>
+    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Header with Smart Logo & Logged User Info -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-wrapper">
+                <img src="logo.png" alt="Campus Logo" class="brand-logo">
+            </div>
+            <div class="header-title">
+                <h1>Campus Lost &amp; Found</h1>
+                <p>Official student recovery registry &amp; campus notice board</p>
+            </div>
+            <div class="header-auth">
+                <div id="userProfile" class="user-profile" style="display: none;">
+                    <span class="user-badge" id="loggedUserDisplay">👤 User</span>
+                    <button id="logoutBtn" class="btn-logout">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 1. Gateway View: Login / Register Screen (Shown by Default) -->
+    <section id="authView" class="auth-gateway">
+        <div class="card auth-card">
+            <div class="card-header text-center">
+                <h2 id="authTitle">Sign In to Continue</h2>
+                <p class="subtitle" id="authSub">Please log in to report, view, or claim lost and found items on campus.</p>
+            </div>
+
+            <form id="authForm">
+                <div class="input-group">
+                    <label for="authUsername">Username *</label>
+                    <input type="text" id="authUsername" placeholder="e.g. lakshay24" required autocomplete="username">
+                </div>
+
+                <div class="input-group">
+                    <label for="authPassword">Password *</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <button type="submit" id="authSubmitBtn" class="btn btn-primary">
+                    <span id="authSubmitText">Login</span>
+                </button>
+            </form>
+
+            <div class="auth-toggle">
+                <span id="toggleQuestion">Don't have an account?</span>
+                <button type="button" id="toggleAuthBtn" class="link-btn">Create one now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Main Portal Workspace (Hidden Until Logged In) -->
+    <main id="mainDashboard" class="main-layout" style="display: none;">
+        
+        <!-- Submission Panel -->
+        <aside class="panel-form">
+            <div class="card form-card">
+                <div class="card-header">
+                    <h2>Report An Item</h2>
+                    <p class="subtitle">Submit details to alert the campus community</p>
+                </div>
+
+                <form id="reportForm">
+                    <div class="input-group">
+                        <label for="itemTitle">Item Title *</label>
+                        <input type="text" id="itemTitle" placeholder="e.g. Dell Laptop Charger, Student ID" required>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="itemCategory">Category *</label>
+                            <select id="itemCategory" required>
+                                <option value="ID Card">ID Card</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Books & Notes">Books &amp; Notes</option>
+                                <option value="Keys">Keys</option>
+                                <option value="Accessories">Accessories / Bags</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="itemStatus">Status Type *</label>
+                            <select id="itemStatus" required>
+                                <option value="Lost">I Lost This</option>
+                                <option value="Found">I Found This</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="itemLocation">Location on Campus *</label>
+                        <input type="text" id="itemLocation" placeholder="e.g. Audi B, Cafeteria 1st Floor" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="itemContact">Your Contact Information *</label>
+                        <input type="text" id="itemContact" placeholder="e.g. Room 204 / 9876543210 / rollno@college.edu" required>
+                    </div>
+
+                    <!-- Photo Upload with Preview -->
+                    <div class="input-group">
+                        <label>Item Photograph (Optional)</label>
+                        <div class="upload-zone" id="uploadZone">
+                            <input type="file" id="itemImage" accept="image/*">
+                            <div class="upload-prompt" id="uploadPrompt">
+                                <span class="upload-icon">📷</span>
+                                <span class="upload-text">Click or drop a photo here</span>
+                                <span class="upload-sub">Automatic size compression applied</span>
+                            </div>
+                            <div class="preview-container" id="previewContainer" style="display: none;">
+                                <img id="imagePreview" alt="Upload Preview">
+                                <button type="button" id="removeImgBtn" class="btn-remove">&times;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <span>Publish Notice</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Feed & Filter Panel -->
+        <section class="panel-feed">
+            <div class="card filter-card">
+                <div class="search-bar">
+                    <input type="text" id="searchQuery" placeholder="Search by title, location, username, or item...">
+                </div>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Category:</label>
+                        <select id="filterCategory">
+                            <option value="All">All Categories</option>
+                            <option value="ID Card">ID Card</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Books & Notes">Books &amp; Notes</option>
+                            <option value="Keys">Keys</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Status:</label>
+                        <select id="filterStatus">
+                            <option value="All">All Statuses</option>
+                            <option value="Lost">Lost</option>
+                            <option value="Found">Found</option>
+                            <option value="Claimed">Claimed / Resolved</option>
+                        </select>
+                    </div>
+
+                    <div class="counter-badge" id="itemCount">Showing: 0 items</div>
+                </div>
+            </div>
+
+            <!-- Feed Grid -->
+            <div id="itemsGrid" class="items-grid">
+                <!-- Dynamically Populated by script.js -->
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
